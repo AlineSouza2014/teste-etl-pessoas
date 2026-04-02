@@ -1,18 +1,8 @@
 # ETL de Migracao de Pessoas em Pentaho - Versao com Staging Transiente
 
-## Pre-requisitos
-
-Para executar o projeto, e necessario:
-
-- Pentaho Data Integration (PDI / Spoon)
-- PostgreSQL instalado e em execucao
-- Criacao de um banco para o projeto
-- Execucao do script `sql/create_tables.sql` 
-- Ajuste manual da conexao de banco nos arquivos `.ktr` e `.kjb`, se necessario
-
 ## Objetivo
 
-Implementar uma ETL de migracao de pessoas utilizando Pentaho Data Integration (PDI), contemplando carga em staging, tratamento e validacao de dados, segregacao de erros, metricas de execucao e controle de processamento por registro.
+Implementar uma ETL de migracao de pessoas utilizando Pentaho Data Integration, contemplando carga em staging, tratamento e validacao de dados, segregacao de erros, metricas de execucao e controle de processamento por registro.
 
 ## Arquitetura da solucao
 
@@ -89,12 +79,61 @@ A transformacao de metricas registra:
 - quantidade de registros invalidos
 - status da execucao
 
+## Aderencia aos requisitos do edital
+
+A solucao foi estruturada para atender aos requisitos centrais descritos no teste tecnico:
+
+- **Normalizacao de dados**  
+  Implementada na transformacao de tratamento, com tipagem de campos, padronizacao de datas e organizacao dos dados antes da carga final.
+
+- **Integridade de dados**  
+  Aplicacao de regras de validacao como CPF obrigatorio, email com formato minimo valido, orgao obrigatorio e consistencia entre data de admissao e data de nascimento.
+
+- **Deteccao de erro com relatorio**  
+  Registros invalidos sao direcionados para a tabela `etl_pessoas_erros`, com registro do motivo do erro para rastreabilidade.
+
+- **Padronizacao em formatos**  
+  Campos foram tratados para manter consistencia de tipo e formato, especialmente nas colunas de data.
+
+- **Robustez contra erro na execucao**  
+  A etapa de tratamento utiliza controle por registro na staging, com as colunas `status_processamento`, `dt_processamento` e `motivo_erro_processamento`, permitindo identificar o andamento do processamento do lote corrente.
+
+- **Metricas de execucao**  
+  A transformacao de metricas registra quantidade de registros lidos, validos, invalidos, horario de inicio, horario de fim e status da execucao.
+
+## Contexto da prova de conceito
+
+Esta implementacao foi pensada como uma prova de conceito alinhada ao contexto descrito no enunciado, que envolve migracao de dados em ambiente governamental, com multiplos orgaos, execucoes paralelas e necessidade de controle operacional.
+
+Por se tratar de uma entrega tecnica demonstrativa, a solucao foi mantida enxuta e objetiva, priorizando:
+- clareza da arquitetura
+- rastreabilidade dos erros
+- controle da execucao
+- separacao entre staging, tratamento, destino final e metricas
+
 ## Como executar
 
 1. Criar as tabelas executando o script SQL em `sql/create_tables.sql`
 2. Ajustar a conexao com o banco PostgreSQL no Pentaho
 3. Garantir que o arquivo `input/pessoas.csv` esteja disponivel
 4. Executar o job `job_migracao_pessoas_transiente.kjb`
+
+## Pre-requisitos
+
+Para executar o projeto, e necessario:
+
+- Pentaho Data Integration (PDI / Spoon)
+- PostgreSQL instalado e em execucao
+- Criacao previa do banco de dados
+- Execucao do script `sql/create_tables.sql`
+
+## Ajustes necessarios no ambiente
+
+Para executar o projeto em outra maquina, pode ser necessario:
+- ajustar a conexao com o banco nos arquivos `.ktr` e `.kjb`
+- informar a senha da conexao localmente no Pentaho
+- reapontar o caminho do arquivo CSV de entrada, caso a estrutura do repositorio seja alterada
+- manter a estrutura de pastas do repositorio para reduzir ajustes manuais
 
 ## Resultado esperado
 
@@ -124,6 +163,23 @@ Cada linha da `stg_pessoas` recebe:
 
 Com isso, dentro do lote corrente, e possivel identificar quais registros foram processados com sucesso e quais falharam, garantindo rastreabilidade e suporte a retomada da etapa de tratamento sem necessidade de reavaliar manualmente cada linha.
 
+## Riscos e mitigacoes
+
+### Risco: duplicidade de carga entre execucoes
+**Mitigacao:** nesta versao, a staging foi modelada como transiente por lote, com reinicializacao a cada nova carga, evitando acumulacao indevida de registros entre execucoes.
+
+### Risco: registros inconsistentes ou incompletos
+**Mitigacao:** validacoes de negocio foram implementadas na etapa de tratamento, com segregacao de registros invalidos em tabela especifica de erros.
+
+### Risco: perda de rastreabilidade sobre falhas
+**Mitigacao:** os registros invalidos armazenam o `motivo_erro`, e a staging registra `status_processamento`, `dt_processamento` e `motivo_erro_processamento`.
+
+### Risco: dificuldade de monitorar a execucao
+**Mitigacao:** a transformacao de metricas registra quantidade lida, quantidade valida, quantidade invalida, horario de inicio, horario de fim e status do processo.
+
+### Risco: evolucao para cenarios maiores
+**Mitigacao:** a arquitetura foi organizada em job principal e transformacoes separadas, facilitando evolucoes futuras, como staging persistente, deduplicacao de entrada e controle de lotes/arquivos processados.
+
 ## Limitacoes da versao atual
 
 Esta versao utiliza staging transiente por lote. Isso significa que a camada de entrada e reinicializada a cada nova execucao.
@@ -138,7 +194,3 @@ Dessa forma, a retomada implementada nesta versao esta concentrada na etapa de t
 - Validacao de CPF duplicado
 - Mais regras de qualidade de dados
 - Retomada completa sem recarga da entrada
-
-## Ajuste de conexao
-
-Por seguranca, a senha da conexao com o banco nao foi armazenada nos arquivos do projeto. Ao executar o fluxo em outro ambiente, e necessario configurar a senha localmente no Pentaho.
