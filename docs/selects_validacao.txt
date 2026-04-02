@@ -1,0 +1,34 @@
+1. staging
+select id_staging, nome, status_processamento, dt_processamento, motivo_erro_processamento
+from public.stg_pessoas
+order by id_staging;
+
+
+2. tabela final
+select *
+from public.tb_pessoas
+order by id_pessoa;
+
+
+
+3. tabela de erros
+select nome, cpf, email, orgao, data_admissao, motivo_erro
+from public.etl_pessoas_erros
+order by id_erro;
+
+
+
+4. metricas
+select *
+from public.etl_metricas_execucao
+order by id_execucao desc;
+
+
+5. contagem rapida
+select 'stg_pessoas' as tabela, count(*) as quantidade from public.stg_pessoas
+union all
+select 'tb_pessoas', count(*) from public.tb_pessoas
+union all
+select 'etl_pessoas_erros', count(*) from public.etl_pessoas_erros
+union all
+select 'etl_metricas_execucao', count(*) from public.etl_metricas_execucao;
