@@ -422,6 +422,7 @@ Job principal
 ├── Move files para processados
 ├── 02_tratamento_pessoas
 └── 03_metricas_execucao
-Autor
+## Autor
 
+Aline Souza  
 Projeto desenvolvido como solução de teste prático para processo ETL de pessoas com tratamento, validação, monitoramento e rastreabilidade.
