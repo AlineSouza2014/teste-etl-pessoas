@@ -1,0 +1,11 @@
+nome,cpf,data_nascimento,email,telefone,sexo,orgao,matricula,cargo,data_admissao
+Ana Souza,,1990-05-10,ana.souza@email.com,62999991111,F,SEAD,MAT0001,Analista,2020-01-15
+Carlos Pereira,98765432100,1988-10-20,carlos.pereiraemail.com,62988887777,M,,MAT0002,Tecnico,2018-03-01
+Maria Oliveira,11122233344,1992-07-30,maria.oliveira@email.com,62977776666,F,SSP,MAT0003,Coordenadora,2019-09-10
+Joao Silva,22233344455,1991-04-12,joao.silva@email.com,62966665555,M,SEDUC,MAT0004,Assistente,2021-06-05
+Patricia Lima,33344455566,1985-12-15,patricia.lima@email.com,62955554444,F,GOIASPREV,MAT0005,Gerente,2010-08-20
+Pedro Alves,44455566677,1993-03-25,pedro.alves@email.com,62944443333,M,SEAD,MAT0006,Analista,2021-02-10
+Luciana Rocha,55566677788,1991-11-02,luciana.rocha@email.com,62933332222,F,SES,MAT0007,Especialista,2017-04-05
+Rafael Costa,66677788899,1987-08-14,rafael.costa@email.com,62922221111,M,SSP,MAT0008,Tecnico,2016-09-18
+Fernanda Melo,77788899900,1994-06-21,fernanda.melo@email.com,62911110000,F,SEDUC,MAT0009,Analista,2022-01-03
+Bruno Martins,88899900011,1989-09-09,bruno.martins@email.com,62900009999,M,GOIASPREV,MAT0010,Supervisor,1980-01-01
