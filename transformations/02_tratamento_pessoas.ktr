@@ -618,7 +618,7 @@ registrando inconsistencias na tabela etl_pessoas_erros e atualizando a staging 
     <database>teste_etl_pessoas</database>
     <port>5432</port>
     <username>postgres</username>
-    <password>Encrypted </password>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ff228dc6fa8c</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -633,6 +633,10 @@ registrando inconsistencias na tabela etl_pessoas_erros e atualizando a staging 
       </attribute>
       <attribute>
         <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
         <attribute>N</attribute>
       </attribute>
       <attribute>
@@ -1255,6 +1259,7 @@ registrando inconsistencias na tabela etl_pessoas_erros e atualizando a staging 
         else null
     end as matricula_duplicada
 from public.stg_pessoas p
+where dt_processamento is null
 order by p.id_staging;</sql>
     <limit>0</limit>
     <lookup/>
