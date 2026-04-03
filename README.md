@@ -178,6 +178,7 @@ select
         else null
     end as cpf_pessoas_diferentes
 from public.stg_pessoas p
+where dt_processamento is null
 order by p.id_staging;
 Regras de validação aplicadas
 
